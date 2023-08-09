@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const loginButton = document.getElementById('login-button');
 
     const clientId = 'dfc2685cc00140e9aae1430de8b7f52f';
-    const redirectUri = 'http://localhost:8080';
+    const redirectUri = 'https://constbogdan.github.io/';
 
     loginButton.addEventListener('click', function () {
         let codeVerifier = generateRandomString(128);
