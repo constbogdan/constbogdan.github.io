@@ -1,34 +1,54 @@
-const express = require('express');
-const querystring = require('querystring');
+document.addEventListener('DOMContentLoaded', function () {
+    const loginButton = document.getElementById('login-button');
 
-const app = express();
-const PORT = process.env.PORT || 8888; // Use the appropriate port
+    const clientId = 'dfc2685cc00140e9aae1430de8b7f52f';
+    const redirectUri = 'http://localhost:8080';
 
-// Replace these values with your actual client ID and redirect URI
-const client_id = 'YOUR_CLIENT_ID';
-const redirect_uri = 'http://localhost:8888/callback';
+    loginButton.addEventListener('click', function () {
+        let codeVerifier = generateRandomString(128);
 
-app.get('/login', (req, res) => {
-    const state = generateRandomString(16);
-    const scope = 'user-read-private user-read-email';
+        generateCodeChallenge(codeVerifier).then(codeChallenge => {
+            let state = generateRandomString(16);
+            let scope = 'user-read-private user-read-email';
 
-    res.redirect('https://accounts.spotify.com/authorize?' +
-        querystring.stringify({
-            response_type: 'code',
-            client_id: client_id,
-            scope: scope,
-            redirect_uri: redirect_uri,
-            state: state
-        }));
+            localStorage.setItem('code_verifier', codeVerifier);
+
+            let args = new URLSearchParams({
+                response_type: 'code',
+                client_id: clientId,
+                scope: scope,
+                redirect_uri: redirectUri,
+                state: state,
+                code_challenge_method: 'S256',
+                code_challenge: codeChallenge
+            });
+
+            window.location = 'https://accounts.spotify.com/authorize?' + args;
+        });
+    });
+
+    async function generateCodeChallenge(codeVerifier) {
+        function base64encode(string) {
+            return btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=+$/, '');
+        }
+
+        const encoder = new TextEncoder();
+        const data = encoder.encode(codeVerifier);
+        const digest = await window.crypto.subtle.digest('SHA-256', data);
+
+        return base64encode(digest);
+    }
+
+    function generateRandomString(length) {
+        let text = '';
+        let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+        for (let i = 0; i < length; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    }
 });
-
-// Add other routes and functionality as needed
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-
-// Helper function to generate random string
-function generateRandomString(length) {
-    // Implementation of random string generation
-}
