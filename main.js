@@ -87,6 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function fetchWebApi(endpoint, method, token) {
+        const url = `https://api.spotify.com/${endpoint}`;
+        console.log('API URL:', url);
         const res = await fetch(`https://api.spotify.com/${endpoint}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
