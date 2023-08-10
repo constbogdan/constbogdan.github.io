@@ -95,7 +95,8 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-            method
+            method,
+            body:JSON.stringify(body)
         });
         return await res.json();
     }
