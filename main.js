@@ -1,3 +1,4 @@
+debugger;
 document.addEventListener('DOMContentLoaded', function () {
     const loginButton = document.getElementById('login-button');
     const resultsContainer = document.getElementById('results'); // Get the results container
