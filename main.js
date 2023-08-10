@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function getTopTracks(token) {
         return (await fetchWebApi(
-            'v1/me/top/artists', 'GET', token
+            'v1/artists/4Z8W4fKeB5YxbusRsdQVPb', 'GET', token
         )).items;
     }
 
