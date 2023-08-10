@@ -1,4 +1,6 @@
 debugger;
+console.log('Current Origin:', window.location.origin);
+
 document.addEventListener('DOMContentLoaded', function () {
     const loginButton = document.getElementById('login-button');
     const resultsContainer = document.getElementById('results'); // Get the results container
