@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const loginButton = document.getElementById('login-button');
+    const resultsContainer = document.getElementById('results'); // Get the results container
 
     const clientId = 'dfc2685cc00140e9aae1430de8b7f52f';
     const redirectUri = 'https://constbogdan.github.io/';
@@ -59,6 +60,38 @@ document.addEventListener('DOMContentLoaded', function () {
     // You can use the captured 'code' for further processing
     if (code) {
         console.log('Access code:', code);
+
         // Perform the next steps using the captured 'code'
+
+        // This is where you pass the access code to the fetchWebApi function
+        const token = code; // Use the captured access code
+        fetchTopTracks(token);
+    }
+
+    async function fetchTopTracks(token) {
+        const topTracks = await getTopTracks(token);
+        const trackList = topTracks?.map(
+            ({ name, artists }) =>
+                `${name} by ${artists.map(artist => artist.name).join(', ')}`
+        );
+
+        // Display results in the results container
+        resultsContainer.innerHTML = trackList ? trackList.join('<br>') : 'No tracks found';
+    }
+
+    async function getTopTracks(token) {
+        return (await fetchWebApi(
+            'v1/me/top/tracks?time_range=short_term&limit=5', 'GET', token
+        )).items;
+    }
+
+    async function fetchWebApi(endpoint, method, token) {
+        const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            method
+        });
+        return await res.json();
     }
 });
