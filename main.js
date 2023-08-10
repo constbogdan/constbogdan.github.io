@@ -1,4 +1,3 @@
-debugger;
 document.addEventListener('DOMContentLoaded', function () {
     const loginButton = document.getElementById('login-button');
 
@@ -51,5 +50,15 @@ document.addEventListener('DOMContentLoaded', function () {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
         return text;
+    }
+
+    // Capture the access code after redirect
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    // You can use the captured 'code' for further processing
+    if (code) {
+        console.log('Access code:', code);
+        // Perform the next steps using the captured 'code'
     }
 });
